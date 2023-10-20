@@ -23,3 +23,6 @@ Features:
   Loadout Saving - Allows players to build a loadout and save it to database. Only saves 1 loadout.
 
   Loadout Loading - Allows players to load a saved loadout for faster respawn instead of building a loadout every time they die.
+
+video preview:
+  https://www.youtube.com/watch?v=dFiAJQyw4Uw
