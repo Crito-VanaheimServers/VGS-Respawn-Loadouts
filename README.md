@@ -6,7 +6,7 @@ What it does:
   Uniform icon button allows choice of Uniform and choice to add items to its inventory.
   Vest icon button allows choice of vest and choice to add items to its inventory.
   Backpack icon button allows choice of backpack and choice to add items to its inventory.
-  helmet icon button allows choice of headgear such as hats, helmets, ect.
+  Helmet icon button allows choice of headgear such as hats, helmets, ect.
   NVG icon button allows choice of night vision.
 
   all items and gear that players can chose from can be customized in config.sqf allowing server owners to only allow certain items and gear
