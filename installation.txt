@@ -1,0 +1,148 @@
+/*
+VGS Respawn Loadouts
+By Crito @Vanaheim Gaming Servers
+https://discord.gg/WEFzqPa
+v1.0 10/18/2023
+*/
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! VGS Loadouts was built around ExtDB3 if you want it to work for ExtDB2			  !!!
+!!! it will be up to you to edit your database.ini file to get it to work for ExtDB2. !!!
+!!!																					  !!!	
+!!! VGS Loadouts Does Not work with Stokes Magee respawn script, it is possible  	  !!!		
+!!!	to get it working but requires some code rearrangement that I will not share  	  !!!
+!!!	due to it being a paid script.													  !!!
+!!!																					  !!!	
+!!! VGS Loadouts works with or without XSSpawn.										  !!!		
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Database Setup:
+
+	At the root of this package you will find the database.sql file.
+	Take this file and run it in your database.
+	This will add a new column at the end of account table called vgs_Loadout.
+
+	Inside @ExileServer folder provided in this package you will find sql_custom folder.
+	Go into the sql_custom folder and open the exile.ini file with a text editor.
+	Copy the contents of this file and paste them at the bottom of your database .ini file.
+	
+Server Side Files Setup:
+	
+	Inside @ExileServer folder provided in this package you will find addons folder.
+	Go into the addons folder and copy the vgs_Respawn_Loadouts.pbo.
+	paste the vgs_Respawn_Loadouts.pbo into your servers @ExileServer\addons directory
+	
+Mission File Setup:
+
+	Inside the mpmissions folder provided in this package you will find mission.map folder
+	Go into the mission.map folder.
+	
+	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Inside the custom folder provided you will find haloparachute folder.
+	This is only necessary if halo jump when spawning in is used so players
+	do not lose backpacks when they land on the ground. If you use EXAD's haloparachute
+	already or any other script that puts backpacks back onto player after a halo jump 
+	than this file is NOT to be used.
+	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
+	You will need to unpbo your mission pbo for your server and if you do not have a custom
+	folder in the unpbo mission file than you will need to copy the custom folder provided
+	with this package into it. 
+	
+	If you already have a custom folder than you will copy the contents of custom 
+	folder provided in this package into your custom folder for your mission.
+	
+	Now with these neeeded files in your mission file you will want to go into the
+	custom folder and find the folder called vgs_Respawn_Loadouts and inside this folder
+	you should find config.sqf, edit this file to your liking.
+	
+	Find your config.cpp file within your mission and search for 
+	class CfgExileCustomCode
+
+	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	It is important that you know if you use XSSpawn or not.
+	It is also important to pay attention to what files you currently have
+	set for overrides in this CfgExileCustomCode and if these following files
+	are overriden already than you need to either remove them from CfgExileCustomCode
+	or go and compare the differences of my provided overrides with those and get them
+	working. I used the most current verstion XSSpawn so its code is already merged with
+	my code therfore if you or anyone else has not added to xsspawn code on your server than
+	you should just remove the correct line from CfgExileCustomCode and use my override leaving
+	all other xs spawn overrides.
+	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
+	if you use XSSpawn than Inside the braces for class CfgExileCustomCode you will neeed to add the following:
+
+		ExileServer_object_player_createBambi = "custom\vgs_Respawn_Loadouts\overrides\xsSpawn\ExileServer_object_player_createBambi.sqf";
+
+	if you DO NOT use XSSpawn than Inside the braces for class CfgExileCustomCode you will neeed to add the following:
+
+		ExileClient_gui_selectSpawnLocation_event_onSpawnButtonClick = "custom\vgs_Respawn_Loadouts\overrides\no_xsSpawn\ExileClient_gui_selectSpawnLocation_event_onSpawnButtonClick.sqf";
+ 
+	Save the file you are done with it.
+	
+	Find your description.ext file within your mission and add the following:
+	
+		#include "custom\vgs_Respawn_Loadouts\GUI\defines.hpp"
+		#include "custom\vgs_Respawn_Loadouts\GUI\dialog.hpp"
+
+	Still in the description.ext file search for class CfgFunctions
+	
+	If you have a class CfgFunctions already then in the braces for the class CfgFunctions
+	add the following paying attention to the comments put above class ExAd:
+	
+		#include "custom\vgs_Respawn_Loadouts\CfgFunctions.cpp"
+		
+		//the next five lines of code are only needed if your using the provided haloparachute files from this package!!!!!
+		class ExAd
+		{
+			tag = "ExAd";
+			#include "custom\haloparachute\CfgFunctions.cpp"
+		};
+
+	If you DO NOT have a class CfgFunctions already in your description.ext then
+	at the bottom of your description.ext add the following paying attention to the 
+	comments put above class ExAd:
+
+		class CfgFunctions
+		{
+			#include "custom\vgs_Respawn_Loadouts\CfgFunctions.cpp"
+				
+			//the next five lines of code are only needed if your using the provided haloparachute files from this package!!!!!
+			class ExAd
+			{
+				tag = "ExAd";
+				#include "custom\haloparachute\CfgFunctions.cpp"
+			};
+		};
+
+	Still in the description.ext file search for class CfgNetworkMessages
+	
+	If you have a class CfgNetworkMessages already then in the braces for the class CfgNetworkMessages
+	add the following:
+
+		#include "custom\vgs_Respawn_Loadouts\CfgNetworkMessages.cpp"
+
+	If you DO NOT have a class CfgNetworkMessages already in your description.ext then
+	at the bottom of your description.ext add the following:
+
+		class CfgNetworkMessages
+		{
+			#include "custom\vgs_Respawn_Loadouts\CfgNetworkMessages.cpp"
+		};
+
+	Save the file you are done with it.
+
+	Find your initPlayerLocal.sqf file within your mission and add the following:
+
+		[]execVM "custom\vgs_Respawn_Loadouts\init.sqf";
+
+	Save the file you are done with it.
+
+	You are done with the your mission and can now pbo it back up!
+
+	If you use infistar you will need to add the 99102 to allowedIDDs otherwise the menu will not work
+	for non admin players and they will not be able to respawn.
+
+	Enjoy.
